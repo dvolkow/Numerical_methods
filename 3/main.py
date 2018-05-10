@@ -13,6 +13,8 @@ ga = int(input('Enter a: '))
 gb = int(input('Enter b: '))
 
 PRECISION = 1e-10
+TYPE_MAX  = 0
+TYPE_MIN  = 1
 
 
 '''
@@ -36,36 +38,41 @@ print(m)
 w, v = np.linalg.eig(m)
 print("Maximum abs value:" + str(max(np.abs((w)))))
 print("Minimum abs value:" + str(min(np.abs((w)))))
+print("Minimum value:" + str(min((w))))
 
 
-def degress_method(A, s):
+def degress_method(A, s, TYPE):
     E  = np.array([rand.random()] * s)
     E.resize(s, 1)
     x  = np.dot(A, E)
-    print(x)
-    x1 = float(x[0][0])
+    x1 = float(x[0][0]) if TYPE == TYPE_MAX else 1/float(x[0][0])
     d  = abs(norm(x, ord = 2) - norm(E, ord = 2))
     n  = 1
 
     while d > PRECISION: 
         E  = np.array(x)
         x  = np.dot(A, E)
-        x1 = float(x[0][0])
+        x1 = float(x[0][0]) if TYPE == TYPE_MAX else 1/float(x[0][0])
         n += 1
         res = np.array(x)
         x /= x1
         d = abs(norm(E, ord=2) - norm(x, ord=2))
     return res, n
 
-lambdamax, i = degress_method(m, gs)
+
+lambdamax, i = degress_method(m, gs, TYPE_MAX)
 maxl = lambdamax[0, 0]
 print(lambdamax)
 print("Maximum by degress method: ", maxl, " by ", i,
         " iterations")
 
-ainv = inv(m) 
-lambdamin, i = degress_method(ainv, gs)
-minl = abs(lambdamin[0, 0])
+print(m)
+print(np.identity(len(m)))
+m -= np.identity(len(m)) * maxl
+print(m)
+#ainv = inv(m) 
+lambdamin, i = degress_method(m, gs, TYPE_MAX)
+minl = lambdamin[0, 0] + maxl
 print(lambdamin)
 print("Minimum by degress method: ", minl, " by ", i,
         " iterations")
