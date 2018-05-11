@@ -118,7 +118,6 @@ def trace(matrix):
 '''
 def jacoby(matrix):
     while(matrix_half_norm(matrix) > PRECISION):
-    #    print(matrix_half_norm(matrix))
         for i in range(len(matrix) - 1):
             for j in range(i + 1, len(matrix)):
                 matrix = jacoby_rotate(matrix, i, j)
@@ -132,24 +131,17 @@ w, v = np.linalg.eig(m)
 print("'True' Maximum abs value: " + str(max(np.abs((w)))))
 print("'True' Minimum value: " + str(min((w))))
 
-
-print("\nMatrix before jacoby procedure:")
-print(matrix_init(gs, ga, gb))
-jm = jacoby(matrix_init(gs, ga, gb))
-print("\nMatrix after jacoby procedure:")
 jm = jacoby(matrix_init(gs, ga, gb))
 print("Trace:               ", trace(matrix_init(gs, ga, gb)))
-print("Sum of self numbers: \n", trace(jm))
-print(jm)
+print("Sum of self numbers: ", trace(jm))
  
 
-print("Self numbers by Jacoby:")
+print("\nSelf numbers by Jacoby:")
 for i in range(len(jm)):
     print(jm[i, i])
 
 
 print("\nMatrix before degress procedure:")
-print(matrix_init(gs, ga, gb))
 lambdamax, i = degress_method(matrix_init(gs, ga, gb), gs, TYPE_MAX)
 maxl = lambdamax[0, 0]
 print("Maximum by degress method: ", maxl, " by ", i,
