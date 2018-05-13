@@ -1,10 +1,10 @@
-#! /usr/bin/env python
-from math import log, cos, pi, exp
-import matplotlib.pyplot as plt
+#! /usr/bin/env python3
+import math 
+#import matplotlib.pyplot as plt
 
 p = lambda x: (x + x * x) / (2.0 - x)
-q = lambda x: log(x + (1 + x) ** 0.5)
-f = lambda x: 1.0 + cos((pi / 2.0) * x)
+q = lambda x: math.log(x + (1 + x) ** 0.5, math.e)
+f = lambda x: 1.0 + math.cos((math.pi / 2.0) * x)
 
 # -- Edge conditions of III kind:
 alpha = [2.0, 0.0]
@@ -13,12 +13,12 @@ A, B = 0.0, 0.0
 
 a, b = 0.0, 1.0
 
-N = int(input())
+N = int(input("Enter N: "))
 
 
 def thomas_algorithm(N, a = a, b = b, A = A, B = B ):
-	X = [a + float(j) * (b - a) / N for j in xrange(N + 1)]
-	Y = [0.0 for i in xrange(N + 1)]
+	X = [a + float(j) * (b - a) / N for j in range(N + 1)]
+	Y = [0.0 for i in range(N + 1)]
 
 	m, k, c, d, u, v = [], [], [], [], [], []
 	h = (b - a) / N
@@ -38,7 +38,7 @@ def thomas_algorithm(N, a = a, b = b, A = A, B = B ):
 	u.append(kap[0])
 	v.append(nu[0])
 
-	grid = ((j[0], a + float(j[1]) * (b-a) / N) for j in enumerate(xrange(0, N)))
+	grid = ((j[0], a + float(j[1]) * (b-a) / N) for j in enumerate(range(0, N)))
 	
 	for (i, x) in grid:
 		m.append(1.0 + (h/2.0)*p(x))
@@ -46,23 +46,24 @@ def thomas_algorithm(N, a = a, b = b, A = A, B = B ):
 		c.append(1.0 - (h/2.0)*p(x))
 		d.append(((h**2)*f(x)))
 
-	for i in xrange(1, N):
+	for i in range(1, N):
 		u.append((m[i])/(k[i] - c[i]*u[i-1]))
 		v.append(((c[i]*v[i-1]-d[i])/(k[i]-c[i]*u[i-1])))
-		print u[i], v[i]
+#		print(u[i], v[i])
 
 	Y[N] = (-kap[1]*v[N-1]-nu[1])/(kap[1]*u[N-1]-1.0)
 	
-	for i in xrange(N-1, 0 ,-1):
+	for i in range(N-1, 0 ,-1):
 		Y[i] = u[i]*Y[i+1] + v[i]
 
 	Y[0] = u[0]*Y[1] + v[0]
-
-	for i in xrange(N+1):
-		print '%12e %12e'%(X[i],Y[i])
+	print("X[i],    Y[i]")        
+	for i in range(N+1):
+		print(X[i], "   ", Y[i])
 	return X, Y
 
 
+'''
 plt.title('The graphs of the solution of equation:')
 plt.ylabel('y')
 plt.xlabel('x')
@@ -76,6 +77,14 @@ def plot_result(N, a = a, b = b, A = A, B = B):
 plot_result(N)
 plt.savefig('result.png')
 plt.show()
+'''
 
 
-#thomas_algorithm(320)
+
+def main():
+    thomas_algorithm(N)
+
+
+if __name__ == '__main__':
+	main()
+
